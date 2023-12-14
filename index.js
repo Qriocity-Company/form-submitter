@@ -17,15 +17,15 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-const resend = new Resend('re_YdxGfkmh_MLyNKexkX47NgyRVdZhUVZCY');
+const resend = new Resend('re_B7HdRo92_AJ5df3nkFV7XYXNoSs9Mxi9U');
 
 app.post('/submit-form', async (req, res) => {
   try {
     const { formData } = req.body;
-    const senderEmail = formData.get("senderEmail");
-    const message = formData.get("message");
-    const phno = formData.get("phoneNumber");
-    const name = formData.get("name");
+    const senderEmail = formData.senderEmail
+    const message = formData.message
+    const phno = formData.phoneNumber
+    const name = formData.name
 
     console.log(senderEmail)
 
