@@ -21,14 +21,24 @@ const resend = new Resend('re_YdxGfkmh_MLyNKexkX47NgyRVdZhUVZCY');
 
 app.post('/submit-form', async (req, res) => {
   try {
-    const { email } = req.body;
+    const { formData } = req.body;
+    const senderEmail = formData.get("senderEmail");
+    const message = formData.get("message");
+    const phno = formData.get("phoneNumber");
+    const name = formData.get("name");
 
-    console.log(email)
+    console.log(senderEmail)
+
     const data = await resend.emails.send({
-      from: 'Acme <onboarding@resend.dev>',
-      to: [email],
-      subject: 'Hello World',
-      html: '<strong>It works!</strong>',
+      from: "Qriocity.in <onboarding@resend.dev>",
+      to: "responses.qriocity@gmail.com",
+      subject: "New message from Invictus",
+      reply_to: senderEmail,
+      html: `<h3> ${name} sended a message on Resnet  :</h3>
+       <p>The senders email is: ${senderEmail}</p> <br/> 
+       <p>The Sender Mobile no is :${phno}</p> <br/> 
+       <p>The message is: ${message}</p>
+            `,
     });
     console.log(data);
     res.status(200).json({ success: true, data });
