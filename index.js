@@ -33,9 +33,7 @@ app.post('/submit-form', async (req, res) => {
       from: "Qriocity.in <onboarding@resend.dev>",
       to: "responses.qriocity@gmail.com",
       subject: "New message from Invictus",
-      reply_to: senderEmail,
-      html: `<h3> ${name} sended a message on Resnet  :</h3>
-       <p>The senders email is: ${senderEmail}</p> <br/> 
+      html: `<h3> ${name} sended a message on Qriocity.in :</h3>
        <p>The Sender Mobile no is :${phno}</p> <br/> 
        <p>The message is: ${message}</p>
             `,
