@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import { Resend } from 'resend';
-
+import dotenv from 'dotenv'
+import nodemailer from 'nodemailer'
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -13,11 +13,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
-
-const resend = new Resend('re_B7HdRo92_AJ5df3nkFV7XYXNoSs9Mxi9U');
+dotenv.config();
 
 app.post('/submit-form', async (req, res) => {
   try {
@@ -29,17 +25,31 @@ app.post('/submit-form', async (req, res) => {
 
     console.log(senderEmail)
 
-    const data = await resend.emails.send({
-      from: "Qriocity.in <onboarding@resend.dev>",
-      to: "responses.qriocity@gmail.com",
-      subject: "New message from Invictus",
-      html: `<h3> ${name} sended a message on Qriocity.in :</h3>
-       <p>The Sender Mobile no is :${phno}</p> <br/> 
-       <p>The message is: ${message}</p>
-            `,
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'responses.qriocity@gmail.com',
+            pass: process.env.pass 
+        }
     });
-    console.log(data);
-    res.status(200).json({ success: true, data });
+    const mailOptions = {
+        from: 'responses.qriocity@gmail.com', // Replace with your Gmail address
+        to: 'responses.qriocity@gmail.com', // Replace with your actual email address
+        subject: 'New Form Submission',
+        text: `Name: ${name}\nNumber: ${phno}\nMessage: ${message}`
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.error(error);
+        }
+        console.log('Email sent: ' + info.response);
+    });
+
+    res.send('Form submitted successfully!');
+
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: error.message });
